@@ -17,20 +17,22 @@ from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
 
 from std_msgs.msg import String
+import inflect  # Import the 'inflect' library
 
 
 class Talker(Node):
 
     def __init__(self):
-        super().__init__('talker')
+        super().__init__('Mayo')  # Replace 'your_last_name' with your actual last name
         self.i = 0
         self.pub = self.create_publisher(String, 'chatter', 10)
         timer_period = 1.0
         self.tmr = self.create_timer(timer_period, self.timer_callback)
-
+        self.p = inflect.engine()  # Create an instance of the inflect engine
+    
     def timer_callback(self):
         msg = String()
-        msg.data = 'Hello World: {0}'.format(self.i)
+        msg.data = 'Hello World: {0}'.format(self.p.number_to_words(self.i))  # Convert number to words
         self.i += 1
         self.get_logger().info('Publishing: "{0}"'.format(msg.data))
         self.pub.publish(msg)
