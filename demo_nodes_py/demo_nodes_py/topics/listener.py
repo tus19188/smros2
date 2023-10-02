@@ -22,12 +22,12 @@ from std_msgs.msg import String
 class Listener(Node):
 
     def __init__(self):
-        super().__init__('Mayo')  # Replace 'your_last_name' with your actual last name
+        super().__init__('Mayo_listener')  # Replace 'your_last_name' with your actual last name
         self.sub = self.create_subscription(String, 'chatter', self.chatter_callback, 10)
         self.my_first_name = "Stephanie"  # Replace with your first name
         
     def chatter_callback(self, msg):
-        self.get_logger().info(f'I heard: [{msg.data}] - My first name is: {self.my_first_name}')
+        self.get_logger().info(f'Stephanie heard: {self.my_first_name} -> [{msg.data}]')
 
 
 def main(args=None):
