@@ -15,67 +15,39 @@
 import rclpy
 from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
-from std_msgs.msg import String
 
-class Listener(Node):
+from std_msgs.msg import String
+import inflect  # Import the 'inflect' library
+
+class Talker(Node):
 
     def __init__(self):
-        super().__init__('Mayo_listener')
-        self.sub = self.create_subscription(String, 'chatter', self.chatter_callback, 10)
-        self.my_first_name = "Stephanie"
+        super().__init__('your_last_name_talker')  # Replace 'your_last_name' with your actual last name
+        self.i = 0
+        self.pub = self.create_publisher(String, 'chatter', 10)
+        timer_period = 1.0
+        self.tmr = self.create_timer(timer_period, self.timer_callback)
+        self.p = inflect.engine()  # Create an instance of the inflect engine
 
-        # Define a dictionary to map text representations of numbers to numerical values
-        self.number_mapping = {
-            "one": 1,
-            "two": 2,
-            "three": 3,
-            "four": 4,
-            "five": 5,
-            "six": 6,
-            "seven": 7,
-            "eight": 8,
-            "nine": 9,
-            "ten": 10,
-            "eleven": 11,
-            "twelve": 12,
-            "thirteen": 13,
-            "fourteen": 14,
-            "fifteen": 15,
-            "sixteen": 16,
-            "seventeen": 17,
-            "eighteen": 18,
-            "nineteen": 19,
-            "twenty": 20
-        }
-
-    def convert_to_number(self, word):
-        # Check if the word is in the number mapping dictionary
-        return str(self.number_mapping.get(word.lower(), word))
-
-    def chatter_callback(self, msg):
-        # Split the received message into words
-        words = msg.data.split()
-        converted_message = []
-
-        for word in words:
-            converted_word = self.convert_to_number(word)
-            converted_message.append(converted_word)
-
-        # Join the words back together to form the converted message
-        converted_msg = " ".join(converted_message)
-
-        self.get_logger().info(f'{self.my_first_name} heard: {self.my_first_name} -> [{converted_msg}]')
+    def timer_callback(self):
+        msg = String()
+        msg.data = 'Hello World: {0}'.format(self.p.number_to_words(self.i))  # Convert number to words
+        self.i += 1
+        self.get_logger().info('Publishing: "{0}"'.format(msg.data))
+        self.pub.publish(msg)
 
 def main(args=None):
     rclpy.init(args=args)
-    node = Listener()
+
+    node = Talker()
+
     try:
         rclpy.spin(node)
     except (KeyboardInterrupt, ExternalShutdownException):
         pass
     finally:
         node.destroy_node()
-        rclpy.shutdown()
+        rclpy.try_shutdown()
 
 if __name__ == '__main__':
     main()
