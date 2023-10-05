@@ -24,9 +24,9 @@ class Listener(Node):
         self.sub = self.create_subscription(String, 'chatter', self.chatter_callback, 10)
         self.my_first_name = "Stephanie"
 
-    def convert_to_number(self, word):
         # Define a dictionary to map text representations of numbers to numerical values
-        number_mapping = {
+        self.number_mapping = {
+            "zero": 0,
             "one": 1,
             "two": 2,
             "three": 3,
@@ -54,18 +54,17 @@ class Listener(Node):
             "seventy": 70,
             "eighty": 80,
             "ninety": 90,
-            "hundred": 100,
-            "thousand": 1000
         }
-        
+
+    def convert_to_number(self, word):
         # Check if the word is in the number mapping dictionary
-        if word.lower() in number_mapping:
-            return str(number_mapping[word.lower()])
+        if word.lower() in self.number_mapping:
+            return str(self.number_mapping[word.lower()])
         # If not found, leave the word as is
         return word
 
     def split_message(self, message):
-        # Split the message into words based on spaces and hyphens
+        # Split the message into words based on spaces
         words = message.split()
         return words
 
