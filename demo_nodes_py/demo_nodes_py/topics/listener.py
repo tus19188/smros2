@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 import rclpy
 from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
@@ -46,12 +45,24 @@ class Listener(Node):
             "seventeen": 17,
             "eighteen": 18,
             "nineteen": 19,
-            "twenty": 20
+            "twenty": 20,
+            "thirty": 30,
+            "forty": 40,
+            "fifty": 50,
+            "sixty": 60,
+            "seventy": 70,
+            "eighty": 80,
+            "ninety": 90,
+            "hundred": 100,
+            "thousand": 1000
         }
 
     def convert_to_number(self, word):
         # Check if the word is in the number mapping dictionary
-        return str(self.number_mapping.get(word.lower(), word))
+        if word.lower() in self.number_mapping:
+            return str(self.number_mapping[word.lower()])
+        # If not found, leave the word as is
+        return word
 
     def chatter_callback(self, msg):
         # Split the received message into words
@@ -80,4 +91,6 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
+
+
 
