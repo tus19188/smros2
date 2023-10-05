@@ -22,7 +22,7 @@ import inflect  # Import the 'inflect' library
 class Talker(Node):
 
     def __init__(self):
-        super().__init__('your_last_name_talker')  # Replace 'your_last_name' with your actual last name
+        super().__init__('Mayo_talker')  # Replace 'your_last_name' with your actual last name
         self.i = 0
         self.pub = self.create_publisher(String, 'chatter', 10)
         timer_period = 1.0
