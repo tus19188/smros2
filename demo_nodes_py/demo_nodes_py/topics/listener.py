@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 import rclpy
 from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
@@ -64,9 +65,13 @@ class Listener(Node):
         # If not found, leave the word as is
         return word
 
+    def split_message(self, message):
+        # Split the message into words using spaces, hyphens, and colons
+        return re.split(r'[\s:-]', message)
+
     def chatter_callback(self, msg):
         # Split the received message into words
-        words = msg.data.split()
+        words = self.split_message(msg.data)
         converted_message = []
 
         for word in words:
