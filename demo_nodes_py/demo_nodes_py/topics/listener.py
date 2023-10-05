@@ -12,11 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+python
+Copy code
 import rclpy
 from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
 from std_msgs.msg import String
-import re  # Import the 're' module
 
 class Listener(Node):
 
@@ -66,9 +67,13 @@ class Listener(Node):
         return word
 
     def split_message(self, message):
-        # Use a regular expression to tokenize the message
-        words = re.findall(r'\w+|-', message)
-        return words
+        # Split the message into words based on spaces
+        words = message.split()
+        tokens = []
+        for word in words:
+            # Split words on hyphens
+            tokens.extend(word.split('-'))
+        return tokens
 
     def chatter_callback(self, msg):
         # Split the received message into words
@@ -97,4 +102,3 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
-
