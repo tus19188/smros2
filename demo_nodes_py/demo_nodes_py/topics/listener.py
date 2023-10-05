@@ -17,7 +17,6 @@ import rclpy
 from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
 from std_msgs.msg import String
-from word2number import w2n  # Import the word2number library
 
 class Listener(Node):
 
@@ -27,12 +26,43 @@ class Listener(Node):
         self.my_first_name = "Stephanie"
 
     def convert_to_number(self, word):
-        try:
-            # Use word2number library to convert text to number
-            return str(w2n.word_to_num(word))
-        except ValueError:
-            # If not a valid number, leave the word as is
-            return word
+        # Define a dictionary to map text representations of numbers to numerical values
+        number_mapping = {
+            "zero": 0,
+            "one": 1,
+            "two": 2,
+            "three": 3,
+            "four": 4,
+            "five": 5,
+            "six": 6,
+            "seven": 7,
+            "eight": 8,
+            "nine": 9,
+            "ten": 10,
+            "eleven": 11,
+            "twelve": 12,
+            "thirteen": 13,
+            "fourteen": 14,
+            "fifteen": 15,
+            "sixteen": 16,
+            "seventeen": 17,
+            "eighteen": 18,
+            "nineteen": 19,
+            "twenty": 20,
+            "thirty": 30,
+            "forty": 40,
+            "fifty": 50,
+            "sixty": 60,
+            "seventy": 70,
+            "eighty": 80,
+            "ninety": 90,
+        }
+        
+        # Check if the word is in the number mapping dictionary
+        if word.lower() in number_mapping:
+            return str(number_mapping[word.lower()])
+        # If not found, leave the word as is
+        return word
 
     def split_message(self, message):
         # Split the message into words based on spaces
@@ -66,4 +96,5 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
+
 
