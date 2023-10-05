@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 import rclpy
 from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
@@ -24,11 +25,33 @@ class Listener(Node):
         self.sub = self.create_subscription(String, 'chatter', self.chatter_callback, 10)
         self.my_first_name = "Stephanie"
 
+        # Define a dictionary to map text representations of numbers to numerical values
+        self.number_mapping = {
+            "one": 1,
+            "two": 2,
+            "three": 3,
+            "four": 4,
+            "five": 5,
+            "six": 6,
+            "seven": 7,
+            "eight": 8,
+            "nine": 9,
+            "ten": 10,
+            "eleven": 11,
+            "twelve": 12,
+            "thirteen": 13,
+            "fourteen": 14,
+            "fifteen": 15,
+            "sixteen": 16,
+            "seventeen": 17,
+            "eighteen": 18,
+            "nineteen": 19,
+            "twenty": 20
+        }
+
     def convert_to_number(self, word):
-        # Define a custom conversion function for "seventeen"
-        if word.lower() == "seventeen":
-            return "17"
-        return word
+        # Check if the word is in the number mapping dictionary
+        return str(self.number_mapping.get(word.lower(), word))
 
     def chatter_callback(self, msg):
         # Split the received message into words
