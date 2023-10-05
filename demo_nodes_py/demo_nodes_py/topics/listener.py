@@ -17,7 +17,7 @@ from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
 from std_msgs.msg import String
 import re
-from word2number import w2n  # Import the word2number library
+from word2number import w2n
 
 class Listener(Node):
 
@@ -39,14 +39,42 @@ class Listener(Node):
         words = re.findall(r'\S+', message)
         return words
 
+    def handle_and_number(self, words, index):
+        # Handle numbers with "and" (e.g., one hundred and twenty-five)
+        number_parts = []
+
+        # Check if the current word is "and"
+        if words[index] == "and":
+            index += 1
+
+            # Keep parsing until the end of the words or a non-number word is encountered
+            while index < len(words) and words[index].isdigit():
+                number_parts.append(words[index])
+                index += 1
+
+        return index, number_parts
+
     def chatter_callback(self, msg):
         # Split the received message into words
         words = self.split_message(msg.data)
         converted_message = []
 
-        for word in words:
-            converted_word = self.convert_to_number(word)
+        index = 0
+        while index < len(words):
+            word = words[index]
+
+            # Check if the current word is "and"
+            if word == "and":
+                index, number_parts = self.handle_and_number(words, index)
+                if number_parts:
+                    converted_word = " ".join(number_parts)
+                else:
+                    converted_word = word
+            else:
+                converted_word = self.convert_to_number(word)
+
             converted_message.append(converted_word)
+            index += 1
 
         # Join the words back together to form the converted message
         converted_msg = " ".join(converted_message)
@@ -66,6 +94,4 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
-
-
 
