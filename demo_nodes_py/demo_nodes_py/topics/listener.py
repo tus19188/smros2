@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 import rclpy
 from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
@@ -43,15 +44,9 @@ class Listener(Node):
                 else:
                     return word
             else:
-                try:
-                    return str(w2n.word_to_num(word))
-                except ValueError:
-                    return word
-        else:
-            try:
                 return str(w2n.word_to_num(word))
-            except ValueError:
-                return word
+        else:
+            return str(w2n.word_to_num(word))
 
     def split_message(self, message):
         words = message.split()
@@ -82,3 +77,5 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
+
+
