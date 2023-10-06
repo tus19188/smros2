@@ -28,19 +28,21 @@ class Listener(Node):
 
     def convert_to_number(self, word):
         try:
-            # Use num2words library to convert text to number
-            return str(num2words(word))
+            # Check if the word is a valid number
+            if word.isdigit():
+                return word  # It's already a number, so no need to convert
+            else:
+                # Use num2words library to convert text to number
+                return str(num2words(word))
         except ValueError:
-            # If conversion is not possible, leave the word as is
+            # If the word cannot be converted, leave it as is
             return word
 
     def split_message(self, message):
-        # Split the message into words based on spaces
         words = message.split()
         return words
 
     def chatter_callback(self, msg):
-        # Split the received message into words
         words = self.split_message(msg.data)
         converted_message = []
 
@@ -48,7 +50,6 @@ class Listener(Node):
             converted_word = self.convert_to_number(word)
             converted_message.append(converted_word)
 
-        # Join the words back together to form the converted message
         converted_msg = " ".join(converted_message)
 
         self.get_logger().info(f'{self.my_first_name} heard: {self.my_first_name} -> [{converted_msg}]')
