@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 import rclpy
 from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
 from std_msgs.msg import String
-from num2words import num2words
+from words2numbers import words_to_numbers
 
 class Listener(Node):
 
@@ -28,12 +27,8 @@ class Listener(Node):
 
     def convert_to_number(self, word):
         try:
-            # Check if the word is a valid number
-            if word.isdigit():
-                return word  # It's already a number, so no need to convert
-            else:
-                # Use num2words library to convert text to number
-                return str(num2words(word))
+            # Use words2numbers library to convert text to number
+            return str(words_to_numbers(word))
         except ValueError:
             # If the word cannot be converted, leave it as is
             return word
