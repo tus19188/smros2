@@ -25,21 +25,26 @@ class Listener(Node):
         self.sub = self.create_subscription(String, 'chatter', self.chatter_callback, 10)
         self.my_first_name = "Stephanie"
 
-    def convert_to_number(self, word):
-        if "hundred" in word:
-            parts = word.split()
-            if parts[0] == "one":
-                if len(parts) == 2 and parts[1] == "hundred":
-                    return "100"
-                else:
-                    parts.remove("hundred")
-                    return str(w2n.word_to_num(" ".join(parts)))
+    def convert_to_number(word):
+    if "hundred" in word:
+        parts = word.split()
+        if "and" in parts:
+            # Handle numbers like "one hundred and eight"
+            idx_and = parts.index("and")
+            before_and = parts[:idx_and]
+            after_and = parts[idx_and + 1:]
+            if len(before_and) == 2 and before_and[0] == "one" and before_and[1] == "hundred":
+                return str(w2n.word_to_num(" ".join(after_and)))
             else:
                 return word
-        try:
-            return str(w2n.word_to_num(word))
-        except ValueError:
+        elif parts[0] == "one" and parts[1] == "hundred":
+            return "100"
+        else:
             return word
+    try:
+        return str(w2n.word_to_num(word))
+    except ValueError:
+        return word
 
     def split_message(self, message):
         words = message.split()
