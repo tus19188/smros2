@@ -12,11 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 import rclpy
 from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
 from std_msgs.msg import String
-from words2numbers import words_to_numbers
+from word2number import w2n
 
 class Listener(Node):
 
@@ -27,8 +28,8 @@ class Listener(Node):
 
     def convert_to_number(self, word):
         try:
-            # Use words2numbers library to convert text to number
-            return str(words_to_numbers(word))
+            # Use word2number library to convert text to number
+            return str(w2n.word_to_num(word))
         except ValueError:
             # If the word cannot be converted, leave it as is
             return word
@@ -62,3 +63,4 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
+
