@@ -44,9 +44,15 @@ class Listener(Node):
                 else:
                     return word
             else:
-                return str(w2n.word_to_num(word))
+                try:
+                    return str(w2n.word_to_num(word))
+                except ValueError:
+                    return word  # Return the original word on conversion failure
         else:
-            return str(w2n.word_to_num(word))
+            try:
+                return str(w2n.word_to_num(word))
+            except ValueError:
+                return word  # Return the original word on conversion failure
 
     def split_message(self, message):
         words = message.split()
