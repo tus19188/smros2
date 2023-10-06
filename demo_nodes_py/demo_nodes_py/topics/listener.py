@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 import rclpy
 from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
@@ -27,11 +26,19 @@ class Listener(Node):
         self.my_first_name = "Stephanie"
 
     def convert_to_number(self, word):
+        if "hundred" in word:
+            parts = word.split()
+            if parts[0] == "one":
+                if len(parts) == 2 and parts[1] == "hundred":
+                    return "100"
+                else:
+                    parts.remove("hundred")
+                    return str(w2n.word_to_num(" ".join(parts)))
+            else:
+                return word
         try:
-            # Use word2number library to convert text to number
             return str(w2n.word_to_num(word))
         except ValueError:
-            # If the word cannot be converted, leave it as is
             return word
 
     def split_message(self, message):
@@ -63,4 +70,6 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
+
+
 
