@@ -17,7 +17,6 @@ import rclpy
 from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
 from std_msgs.msg import String
-from word2number import w2n
 
 class Listener(Node):
 
@@ -26,49 +25,10 @@ class Listener(Node):
         self.sub = self.create_subscription(String, 'chatter', self.chatter_callback, 10)
         self.my_first_name = "Stephanie"
 
-    def convert_to_number(self, word):
-        if "hundred" in word:
-            parts = word.split()
-            if len(parts) == 2 and parts[0] == "one" and parts[1] == "hundred":
-                return "100"
-            elif "and" in parts:
-                idx_and = parts.index("and")
-                before_and = parts[:idx_and]
-                after_and = parts[idx_and + 1:]
-                if len(before_and) == 1 and before_and[0] == "hundred":
-                    # Handle numbers like "one hundred and 1"
-                    return str(100 + w2n.word_to_num(" ".join(after_and)))
-                elif len(before_and) == 2 and before_and[0] == "one" and before_and[1] == "hundred":
-                    # Handle numbers like "one hundred and 1"
-                    return str(100 + w2n.word_to_num(" ".join(after_and)))
-                else:
-                    return word
-            else:
-                try:
-                    return str(w2n.word_to_num(word))
-                except ValueError:
-                    return word  # Return the original word on conversion failure
-        else:
-            try:
-                return str(w2n.word_to_num(word))
-            except ValueError:
-                return word  # Return the original word on conversion failure
-
-    def split_message(self, message):
-        words = message.split()
-        return words
 
     def chatter_callback(self, msg):
-        words = self.split_message(msg.data)
-        converted_message = []
+        self.get_logger().info('I heard: [%s]' % msg.data)
 
-        for word in words:
-            converted_word = self.convert_to_number(word)
-            converted_message.append(converted_word)
-
-        converted_msg = " ".join(converted_message)
-
-        self.get_logger().info(f'{self.my_first_name} heard: {self.my_first_name} -> [{converted_msg}]')
 
 def main(args=None):
     rclpy.init(args=args)
@@ -85,3 +45,66 @@ if __name__ == '__main__':
     main()
 
 
+
+#from word2number import w2n
+
+#class Listener(Node):
+
+ #   def __init__(self):
+  #      super().__init__('listener')
+   #     self.sub = self.create_subscription(String, 'chatter', self.chatter_callback, 10)
+
+    #def chatter_callback(self, msg):
+     #   self.get_logger().info('I heard: [%s]' % msg.data)
+
+
+#class Listener(Node):
+
+ #   def __init__(self):
+        super().__init__('Mayo_listener')
+  #      self.sub = self.create_subscription(String, 'chatter', self.chatter_callback, 10)
+   #     self.my_first_name = "Stephanie"
+
+    #def convert_to_number(self, word):
+    #    if "hundred" in word:
+     #       parts = word.split()
+      #      if len(parts) == 2 and parts[0] == "one" and parts[1] == "hundred":
+       #         return "100"
+        #    elif "and" in parts:
+         #       idx_and = parts.index("and")
+          #      before_and = parts[:idx_and]
+           #     after_and = parts[idx_and + 1:]
+            #    if len(before_and) == 1 and before_and[0] == "hundred":
+             #       # Handle numbers like "one hundred and 1"
+              #      return str(100 + w2n.word_to_num(" ".join(after_and)))
+               # elif len(before_and) == 2 and before_and[0] == "one" and before_and[1] == "hundred":
+                #    # Handle numbers like "one hundred and 1"
+                 #   return str(100 + w2n.word_to_num(" ".join(after_and)))
+                #else:
+                 #   return word
+            # else:
+              #  try:
+               #     return str(w2n.word_to_num(word))
+                # except ValueError:
+                  #  return word  # Return the original word on conversion failure
+        # else:
+          #  try:
+           #     return str(w2n.word_to_num(word))
+           # except ValueError:
+            #    return word  # Return the original word on conversion failure
+
+  #  def split_message(self, message):
+   #     words = message.split()
+    #    return words
+
+    #def chatter_callback(self, msg):
+     #   words = self.split_message(msg.data)
+      #  converted_message = []
+
+#        for word in words:
+ #           converted_word = self.convert_to_number(word)
+  #          converted_message.append(converted_word)
+
+#        converted_msg = " ".join(converted_message)
+
+ #       self.get_logger().info(f'{self.my_first_name} heard: {self.my_first_name} -> [{converted_msg}]')
